@@ -1,38 +1,66 @@
-.App {
-  text-align: center;
+body {
+  color: #222;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+img {
+  max-width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+main {
+  padding: 10px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
 }
 
-.App-link {
-  color: #61dafb;
+header a {
+  text-decoration: none;
+  color: inherit;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+header a.logo {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+header nav {
+  display: flex;
+  gap: 1.6rem;
+}
+
+.post {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.post .texts h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.post p.info {
+  margin-block: 6px;
+  color: #888;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  gap: 1rem;
+}
+
+.post p.info a.author {
+  color: #333;
+}
+
+.post p.summary {
+  margin-block: 1rem;
+  line-height: 1.4rem;
 }
