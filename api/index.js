@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 // MODELS
 const User = require("./models/User.js");
@@ -12,6 +13,7 @@ const app = express();
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
+app.use(cookieParser());
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -43,7 +45,7 @@ app.post("/login", async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie(process.env.JWT_COOKIE, token);
+          res.cookie("token", token);
           res.json("ok");
         }
       );
@@ -56,6 +58,23 @@ app.post("/login", async (req, res) => {
     console.log(e);
     res.status(400).json(e);
   }
+});
+
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, {}, (err, info) => {
+      if (err) throw err;
+      res.json(info);
+    });
+  } else {
+    res.sendStatus(400);
+  }
+});
+
+app.post("/logout", (req, res) => {
+  res.cookie("token", "");
+  res.json("ok");
 });
 
 app.listen(4000);
