@@ -54,10 +54,7 @@ app.post("/login", async (req, res) => {
         (err, token) => {
           if (err) throw err;
           res.cookie("token", token);
-          res.json({
-            id: userDocument._id,
-            username,
-          });
+          res.json("ok");
         }
       );
       // res.json()
@@ -95,15 +92,31 @@ app.post("/create", uploadMiddleware.single("image"), async (req, res) => {
   const newPath = `${path}.${ext}`;
   fs.renameSync(path, newPath);
 
-  const { title, summary, content } = req.body;
-  const postDocument = await Post.create({
-    title,
-    summary,
-    content,
-    cover: newPath,
-  });
+  const { token } = req.cookies;
 
-  res.json(postDocument);
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
+    if (err) throw err;
+    const { title, summary, content } = req.body;
+    const postDocument = await Post.create({
+      title,
+      summary,
+      content,
+      cover: newPath,
+      author: info.id,
+    });
+
+    res.json(postDocument);
+  });
 });
+
+app.get("/posts", async (req, res) => {
+  const posts = await Post.find({})
+    .populate("author", ["username"])
+    .sort({ createdAt: -1 })
+    .limit(10);
+  res.json(posts);
+});
+
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.listen(4000);

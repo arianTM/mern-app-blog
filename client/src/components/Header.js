@@ -8,9 +8,11 @@ export default function Header() {
     fetch("http://localhost:4000/profile", {
       credentials: "include",
     }).then((res) => {
-      res.json().then((userInfo) => {
-        setUserInfo(userInfo);
-      });
+      if (res.ok) {
+        res.json().then((userInfo) => {
+          setUserInfo(userInfo);
+        });
+      }
     });
   }, []);
 

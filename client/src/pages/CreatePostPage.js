@@ -50,6 +50,7 @@ export default function CreatePostPage() {
     const res = await fetch("http://localhost:4000/create", {
       method: "POST",
       body: myFormData,
+      credentials: "include",
     });
     if (res.ok) {
       setRedirect(true);
