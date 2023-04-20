@@ -119,4 +119,10 @@ app.get("/posts", async (req, res) => {
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDocument = await Post.findById(id).populate("author", ["username"]);
+  res.json(postDocument);
+});
+
 app.listen(4000);

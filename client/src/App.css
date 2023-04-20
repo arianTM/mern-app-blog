@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
 * {
   box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -12,7 +15,7 @@ img {
 
 main {
   padding: 10px;
-  max-width: 700px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -39,11 +42,35 @@ header nav {
   gap: 1.6rem;
 }
 
+.post-box {
+  border: 2px solid transparent;
+  margin-bottom: 3.5rem;
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+}
+
+.post-box * {
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-box:hover {
+  border: 2px solid darkblue;
+}
+
 .post {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
-  margin-bottom: 3.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .post {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
 }
 
 .post .texts h2 {
@@ -57,6 +84,7 @@ header nav {
   font-size: 0.7rem;
   font-weight: bold;
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -106,4 +134,44 @@ button {
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
+}
+
+.post-page .post-title {
+  margin: 0;
+  margin-bottom: 0.4rem;
+}
+
+.post-page .post-author {
+  text-align: center;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.post-page .post-author span {
+  color: #777;
+}
+
+.post-page .post-image {
+  display: flex;
+  margin-block: 1rem;
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.post-page .post-image img {
+  object-fit: cover;
+  object-position: center center;
+}
+
+.post-page a {
+  color: #333;
+}
+
+.post-page .post-date {
+  font-size: 0.8rem;
+  text-align: end;
+}
+
+.post-page .post-content {
+  line-height: 1.8;
 }
