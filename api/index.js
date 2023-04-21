@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const multer = require("multer");
 const fs = require("fs");
+const path = require("path");
 
 // MODELS
 const User = require("./models/User.js");
@@ -85,7 +86,7 @@ app.post("/logout", (req, res) => {
   res.json("ok");
 });
 
-app.post("/create", uploadMiddleware.single("image"), async (req, res) => {
+app.post("/post", uploadMiddleware.single("image"), async (req, res) => {
   const { originalname, path } = req.file;
   const parts = originalname.split(".");
   const ext = parts[parts.length - 1];
@@ -106,6 +107,42 @@ app.post("/create", uploadMiddleware.single("image"), async (req, res) => {
     });
 
     res.json(postDocument);
+  });
+});
+
+app.put("/post/:id", uploadMiddleware.single("image"), async (req, res) => {
+  const { title, summary, content } = req.body;
+  const { token } = req.cookies;
+  const { id } = req.params;
+  let newPath = null;
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
+    if (err) throw err;
+    const postDocument = await Post.findById(id);
+    const isAuthor =
+      JSON.stringify(postDocument.author) === JSON.stringify(info.id);
+    if (!isAuthor) {
+      return res.sendStatus(400);
+    }
+
+    if (req.file) {
+      const { originalname, path: filePath } = req.file;
+      const parts = originalname.split(".");
+      const ext = parts[parts.length - 1];
+      newPath = `${filePath}.${ext}`;
+      fs.renameSync(
+        path.join(__dirname, filePath),
+        path.join(__dirname, newPath)
+      );
+    }
+
+    await postDocument.updateOne({
+      title,
+      summary,
+      content,
+      cover: newPath || postDocument.cover,
+    });
+
+    res.json("ok");
   });
 });
 
